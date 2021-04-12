@@ -8,6 +8,7 @@ var MESSAGES = ['Всё отлично!', 'В целом всё неплохо. 
 var NAMES = ['Илья', 'Никита', 'Алина', 'Влад', 'Глеб', 'Наташа', 'Кирилл', 'Георгий', 'Алена', 'Александр'];
 
 var NUMBER_OF_POSTS = 25;
+
 var getRandomNumber = function (maxNum, minNum, roundingType) {
   var randomNumber = 0;
 
@@ -22,7 +23,6 @@ var getRandomNumber = function (maxNum, minNum, roundingType) {
   } else {
     randomNumber = minNum + Math.round(Math.random() * (maxNum - minNum));
   }
-
   return randomNumber;
 };
 
@@ -36,14 +36,13 @@ var createComment = function () {
     comment.message += ' ';
     comment.message += MESSAGES[getRandomNumber(MESSAGES.length, 0, 'floor')];
   }
-
   return comment;
 };
 
 var createPost = function (index) {
   var post = {};
   post.url = 'photos/' + index + '.jpg';
-  post.description = '';
+  post.description = 'Новая фотка!';
   post.likes = getRandomNumber(200, 15);
 
   var comments = [];
@@ -53,7 +52,6 @@ var createPost = function (index) {
     comments.push(comment);
   }
   post.comments = comments;
-
   return post;
 };
 
@@ -63,6 +61,29 @@ var createPostElement = function () {
   postElement.querySelector('.picture__likes').textContent = posts[j].likes;
   postElement.querySelector('.picture__comments').textContent = String(posts[j].comments.length);
   return postElement;
+};
+
+var createElement = function (tagName, className) {
+  var element = document.createElement(tagName);
+  element.classList.add(className);
+  return element;
+};
+
+var createCommentElement = function (postNumber, commentNumber) {
+  var commentElement = createElement('li', 'social__comment');
+
+  var commentAvatarElement = createElement('img', 'social__picture');
+  commentAvatarElement.src = posts[postNumber].comments[commentNumber].avatar;
+  commentAvatarElement.alt = posts[postNumber].comments[commentNumber].name;
+  commentAvatarElement.width = 35;
+  commentAvatarElement.height = 35;
+  commentElement.appendChild(commentAvatarElement);
+
+  var commentTextElement = createElement('p', 'social__text');
+  commentTextElement.textContent = posts[postNumber].comments[commentNumber].message;
+  commentElement.appendChild(commentTextElement);
+
+  return commentElement;
 };
 
 var posts = [];
@@ -77,6 +98,26 @@ var fragment = document.createDocumentFragment();
 for (var j = 0; j < posts.length; j++) {
   fragment.appendChild(createPostElement());
 }
-
 pictureListElement.appendChild(fragment);
 
+var bigPictureElement = document.querySelector('.big-picture');
+bigPictureElement.classList.remove('hidden');
+bigPictureElement.querySelector('.social__comment-count').classList.add('hidden');
+bigPictureElement.querySelector('.comments-loader').classList.add('hidden');
+
+bigPictureElement.querySelector('.big-picture__img').children[0].src = posts[0].url;
+bigPictureElement.querySelector('.likes-count').textContent = posts[0].likes;
+bigPictureElement.querySelector('.comments-count').textContent = String(posts[0].comments.length);
+bigPictureElement.querySelector('.social__caption').textContent = posts[0].description;
+
+var commentsListElement = bigPictureElement.querySelector('.social__comments');
+commentsListElement.removeChild(commentsListElement.querySelector('.social__comment')); // удаление комментариев, находящихчя в разметке
+commentsListElement.removeChild(commentsListElement.querySelector('.social__comment')); // удаление комментариев, находящихчя в разметке
+var commentsFragment = document.createDocumentFragment();
+
+for (var k = 0; k < posts[0].comments.length; k++) {
+  commentsFragment.appendChild(createCommentElement(0, k));
+}
+commentsListElement.appendChild(commentsFragment);
+
+document.querySelector('body').classList.add('modal-open');
