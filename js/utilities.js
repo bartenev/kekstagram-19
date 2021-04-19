@@ -19,7 +19,34 @@
     return randomNumber;
   };
 
+  var getIndexOfArrayElement = function (value, array, key) {
+    var index = 0;
+    var isFind = false;
+    while (!isFind && index < array.length) {
+      if (key) {
+        if (value === array[index][key]) {
+          isFind = true;
+        } else {
+          index++;
+        }
+      } else {
+        if (value === array[index]) {
+          isFind = true;
+        } else {
+          index++;
+        }
+      }
+    }
+
+    if (!isFind) {
+      index = -1;
+    }
+
+    return index;
+  };
+
   window.utilities = {
-    getRandomNumber: getRandomNumber
+    getRandomNumber: getRandomNumber,
+    getIndexOfArrayElement: getIndexOfArrayElement
   };
 })();
