@@ -1,17 +1,17 @@
 'use strict';
 (function () {
-  var NUMBER_OF_POSTS = 25;
+  // var NUMBER_OF_POSTS = 25;
 
   var posts = [];
-  for (var i = 1; i <= NUMBER_OF_POSTS; i++) {
-    posts.push(window.data.createPost(i));
-  }
+  // for (var i = 1; i <= NUMBER_OF_POSTS; i++) {
+  //   posts.push(window.data.createPost(i));
+  // }
 
-  var createPostElement = function () {
+  var createPostElement = function (post) {
     var postElement = pictureTemplate.cloneNode(true);
-    postElement.querySelector('.picture__img').src = posts[j].url;
-    postElement.querySelector('.picture__likes').textContent = posts[j].likes;
-    postElement.querySelector('.picture__comments').textContent = String(posts[j].comments.length);
+    postElement.querySelector('.picture__img').src = post.url;
+    postElement.querySelector('.picture__likes').textContent = post.likes;
+    postElement.querySelector('.picture__comments').textContent = String(post.comments.length);
     return postElement;
   };
 
@@ -40,12 +40,21 @@
 
   var pictureListElement = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
-  var fragment = document.createDocumentFragment();
 
-  for (var j = 0; j < posts.length; j++) {
-    fragment.appendChild(createPostElement());
-  }
-  pictureListElement.appendChild(fragment);
+  var onSuccessLoad = function (uploadPosts) {
+    posts = uploadPosts;
+    var fragment = document.createDocumentFragment();
+    for (var j = 0; j < posts.length; j++) {
+      fragment.appendChild(createPostElement(posts[j]));
+    }
+    pictureListElement.appendChild(fragment);
+  };
+
+  var onErrorLoad = function (errorMessage) {
+    window.backend.createErrorBlock(errorMessage);
+  };
+
+  window.backend.load(onSuccessLoad, onErrorLoad);
 
   var getPost = function (index) {
     return posts[index];
