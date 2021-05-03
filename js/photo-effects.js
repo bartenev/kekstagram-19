@@ -100,6 +100,18 @@
     effectLevelInput.value = 100;
   };
 
+  var resetEffects = function () {
+    setBaseFilterValues();
+    effectLevel.classList.add('hidden');
+    document.querySelector('#effect-none').checked = true;
+    image.querySelector('#image-preview').style.transform = 'scale(1)';
+    scaleControl.value = '100%';
+    if (image.classList.length > 1) {
+      image.classList.remove(image.classList[1]);
+      image.style.filter = '';
+    }
+  };
+
   effectLevelPin.addEventListener('mousedown', function (evt) {
     var minLevelEffect = 0;
     var maxLevelEffect = effectLevelLine.getBoundingClientRect().width;
@@ -153,4 +165,8 @@
   };
 
   document.addEventListener('click', onEffectPreviewClick);
+
+  window.photoEffects = {
+    resetEffects: resetEffects
+  };
 })();

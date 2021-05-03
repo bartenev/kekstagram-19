@@ -9,22 +9,6 @@
   var errorRange = 100;
   var node;
 
-  var createErrorBlock = function (errorMessage) {
-    if (node) {
-      node.textContent = errorMessage;
-      node.style.display = 'block';
-    } else {
-      node = document.createElement('div');
-      node.style = 'z-index: 100; margin: 0 auto; text-align: center; background-color: red;';
-      node.style.position = 'absolute';
-      node.style.left = '0';
-      node.style.right = '0';
-      node.style.fontSize = '30px';
-      node.textContent = errorMessage;
-      document.body.insertAdjacentElement('afterbegin', node);
-    }
-  };
-
   var request = function (onLoad, onError, URL, method, data) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -44,7 +28,7 @@
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения.'); //  Проверьте подключение к интернету и перезагрузите страницу
+      onError('Произошла ошибка соединения.');
     });
 
     xhr.addEventListener('timeout', function () {
@@ -67,8 +51,7 @@
 
   window.backend = {
     load: load,
-    save: save,
-    createErrorBlock: createErrorBlock
+    save: save
   };
 
 })();
