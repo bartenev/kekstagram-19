@@ -15,29 +15,6 @@
     return postElement;
   };
 
-  var createElement = function (tagName, className) {
-    var element = document.createElement(tagName);
-    element.classList.add(className);
-    return element;
-  };
-
-  var createCommentElement = function (postNumber, commentNumber) {
-    var commentElement = createElement('li', 'social__comment');
-
-    var commentAvatarElement = createElement('img', 'social__picture');
-    commentAvatarElement.src = posts[postNumber].comments[commentNumber].avatar;
-    commentAvatarElement.alt = posts[postNumber].comments[commentNumber].name;
-    commentAvatarElement.width = 35;
-    commentAvatarElement.height = 35;
-    commentElement.appendChild(commentAvatarElement);
-
-    var commentTextElement = createElement('p', 'social__text');
-    commentTextElement.textContent = posts[postNumber].comments[commentNumber].message;
-    commentElement.appendChild(commentTextElement);
-
-    return commentElement;
-  };
-
   var pictureListElement = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture').content.querySelector('.picture');
 
@@ -125,6 +102,5 @@
 
   window.gallery = {
     getPost: getPost,
-    getComment: createCommentElement
   };
 })();
