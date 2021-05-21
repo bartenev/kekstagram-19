@@ -70,6 +70,7 @@
       if (evt.target.classList.contains(type) || evt.target === closeButton || evt.key === 'Escape') {
         announcementElement.remove();
         document.removeEventListener('click', onAnnouncementClose);
+        closeFormEditImage();
       }
     };
 
