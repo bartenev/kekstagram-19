@@ -34,6 +34,10 @@
     }
   };
 
+  var defaultPostsFilter = function () {
+    return posts;
+  }
+
   var discussedPostsFilter = function () {
     var discussedPosts = posts.slice().
       sort(function (left, right) {
@@ -61,18 +65,14 @@
     return arrayOfRandomPosts;
   };
 
+  var filtersMap = {
+    'filter-default': defaultPostsFilter,
+    'filter-discussed': discussedPostsFilter,
+    'filter-random': randomPostsFilter
+  };
+
   var changeFilter = window.debounce(function (filter) {
-    switch (filter) {
-      case 'filter-default':
-        renderPosts(posts);
-        break;
-      case 'filter-random':
-        renderPosts(randomPostsFilter());
-        break;
-      case 'filter-discussed':
-        renderPosts(discussedPostsFilter());
-        break;
-    }
+    renderPosts(filtersMap[filter]());
   });
 
   var onFilterClick = function (evt) {
