@@ -5,6 +5,9 @@
   var formEditImage = document.querySelector('.img-upload__form');
   var buttonCloseFormEditImage = formOverlay.querySelector('#upload-cancel');
   var formSubmit = formEditImage.querySelector('.img-upload__submit');
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var uploadedImage = formOverlay.querySelector('#image-preview');
+
 
   var onFormEditImageEcsPress = function (evt) {
     if (evt.key === 'Escape') {
@@ -31,7 +34,23 @@
   };
 
   uploadFile.addEventListener('change', function () {
-    openFormEditImage();
+
+    var file = uploadFile.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+      reader.addEventListener('load', function () {
+        uploadedImage.src = reader.result;
+        openFormEditImage();
+      });
+
+      reader.readAsDataURL(file);
+    }
   });
 
   buttonCloseFormEditImage.addEventListener('click', function () {
